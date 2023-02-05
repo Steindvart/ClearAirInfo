@@ -1,4 +1,10 @@
+# Folders
 .vs/
 venv/
 __pycache__/
+.vscode/
+tmp/
+
+# Files
 bot-config.json
+app.log
