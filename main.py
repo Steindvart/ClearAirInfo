@@ -1,5 +1,6 @@
 import logging
 import json
+import requests
 from aiogram import Bot, Dispatcher, executor, types, utils
 
 import config
@@ -25,19 +26,13 @@ async def cmd_send_welcome(message: types.Message) -> None:
     usr: types.User = message.from_user
     logging.info(f"User id: {usr.id}, locale: {usr.locale}")
 
-    await bot.send_message(
-        message.from_id,
-        text=botConfig.resources["welcome"]
-    )
+    await message.answer(text=botConfig.resources["welcome"])
 
     allCommands = "Список доступных команд:\n"
     for i in botConfig.resources["commands"].values():
         allCommands += i + "\n"
 
-    await bot.send_message(
-        message.from_id,
-        text=allCommands
-    )
+    await message.answer(text=allCommands)
 
 
 @dp.message_handler(commands=['techText', 'getTechText'])
@@ -62,6 +57,15 @@ async def cmd_send_tech_file(message: types.Message) -> None:
 
     with open(filename, "rb") as file:
         await message.reply_document(document=types.InputFile(file))
+
+
+@dp.message_handler(commands=['getCat', 'meow'])
+async def cmd_send_random_cat(message: types.Message) -> None:
+
+    response = requests.get("https://aws.random.cat/meow")
+    catLink = response.json()["file"]
+
+    await message.answer_photo(catLink)
 
 
 # Main
