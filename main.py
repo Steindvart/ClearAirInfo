@@ -1,9 +1,8 @@
 import logging
 import json
-from aiogram import Bot, Dispatcher, executor, types
+from aiogram import Bot, Dispatcher, executor, types, utils
 
-import utils
-from config import BotConfig
+import config
 
 # Constans
 TMP_PATH = "tmp/"
@@ -13,8 +12,8 @@ logging.basicConfig(filename='app.log', level=logging.INFO,
                     format='%(asctime)s %(levelname)s %(name)s - %(message)s')
 
 # Global obj
-botConfig: BotConfig = BotConfig("bot-config.json")
-bot: Bot = Bot(botConfig.token)
+botConfig: config.BotConfig = config.BotConfig("bot-config.json")
+bot: Bot = Bot(botConfig.token, parse_mode=types.ParseMode.HTML)
 dp: Dispatcher = Dispatcher(bot)
 
 
@@ -28,8 +27,7 @@ async def cmd_send_welcome(message: types.Message) -> None:
 
     await bot.send_message(
         message.from_id,
-        text=botConfig.resources["welcome"],
-        parse_mode=types.ParseMode.MARKDOWN
+        text=botConfig.resources["welcome"]
     )
 
     allCommands = "Список доступных команд:\n"
@@ -38,19 +36,18 @@ async def cmd_send_welcome(message: types.Message) -> None:
 
     await bot.send_message(
         message.from_id,
-        text=allCommands,
-        parse_mode=types.ParseMode.MARKDOWN
+        text=allCommands
     )
 
 
 @dp.message_handler(commands=['techText', 'getTechText'])
 async def cmd_send_tech_text(message: types.Message) -> None:
 
-    # NOTE, kim - \n need for first '{'
-    # DEFECT, kim - ugly
-    replyText: str = f"```\n{json.dumps(await utils.get_all_info(bot, message), indent=4)}```"
+    replyText = utils.markdown.hcode(
+        json.dumps(await config.get_all_info(bot, message), indent=4)
+    )
 
-    await message.reply(replyText, parse_mode=types.ParseMode.MARKDOWN)
+    await message.reply(replyText)
 
 
 @dp.message_handler(commands=['techFile', 'getTechFile'])

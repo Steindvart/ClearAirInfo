@@ -2,6 +2,8 @@ import json
 from typing import Any
 from dataclasses import dataclass
 
+from aiogram import Bot, types
+
 
 @dataclass
 class BotConfig:
@@ -23,7 +25,8 @@ class BotConfig:
     # Methods
     def __init__(self, configPath: str) -> None:
 
-        # Default locale is "ru"
+        # NOTE - Default locale is "ru"
+        # DEFECT - Get first locale from supported, no hard-code
         self.locale = "ru"
 
         with open(configPath, "r") as file:
@@ -33,6 +36,10 @@ class BotConfig:
             self.resources = json.load(file)
 
 
-@dataclass
-class Config:
-    bot: BotConfig
+async def get_all_info(bot: Bot, msg: types.Message) -> dict[str, object]:
+    botInfo: types.User = await bot.get_me()
+    return {
+        "bot": json.loads(botInfo.as_json()),
+        "user": json.loads(msg.from_user.as_json()),
+        "chat": json.loads(msg.chat.as_json())
+    }
