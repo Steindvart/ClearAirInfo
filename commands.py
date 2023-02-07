@@ -2,7 +2,8 @@ import logging
 import json
 
 import requests
-from aiogram import types, utils
+from aiogram import types
+from aiogram.utils import markdown
 
 # DEFECT - using global objects, not good
 from main import bot, botConfig
@@ -28,8 +29,11 @@ async def send_tech_text(message: types.Message) -> None:
     logging.info(config.get_log_str("send_tech_text", message.from_user))
 
     botInfo: types.User = await bot.get_me()
-    replyText = utils.markdown.hcode(
-        json.dumps(config.get_all_info(botInfo, message), indent=df.INDENT)
+    replyText = markdown.hcode(
+        json.dumps(
+            config.get_all_info(botInfo, message),
+            indent=df.INDENT
+        )
     )
 
     await message.reply(replyText)
@@ -42,7 +46,7 @@ async def send_tech_file(message: types.Message) -> None:
     filename = df.TMP_PATH + f"{message.from_id}.json"
     with open(filename, "w") as file:
         json.dump(
-            await utils.get_all_info(bot, message),
+            config.get_all_info(bot, message),
             file, indent=df.INDENT
         )
 

@@ -2,7 +2,9 @@ import json
 from typing import Any
 from dataclasses import dataclass
 
-from aiogram import types
+from aiogram.types import User, Message
+
+import default_val as df
 
 
 @dataclass
@@ -36,13 +38,15 @@ class BotConfig:
             self.resources = json.load(file)
 
 
-def get_all_info(botInfo: types.User, msg: types.Message) -> dict[str, object]:
+def get_all_info(botInfo: User, msg: Message) -> dict[str, object]:
     return {
-        "bot": json.loads(botInfo.as_json()),
-        "user": json.loads(msg.from_user.as_json()),
-        "chat": json.loads(msg.chat.as_json())
+        "bot": json.loads(botInfo.json()),
+        "user": json.loads(msg.from_user.json()),
+        "chat": json.loads(msg.chat.json())
     }
 
 
-def get_log_str(source: str, usr: types.User) -> str:
-    return f"{source} - User_id: {usr.id}, first_name: {usr.first_name}, locale: {usr.locale}"
+def get_log_str(source: str, usr: User) -> str:
+    return f"{source} - User_id: {usr.id}, " \
+            f"first_name: {usr.first_name}, " \
+            f"language_code: {usr.language_code}"
