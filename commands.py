@@ -15,13 +15,12 @@ async def send_welcome(message: types.Message) -> None:
 
     logging.info(config.get_log_str("send_welcome", message.from_user))
 
-    await message.answer(text=botConfig.resources["welcome"])
+    await message.answer(botConfig.resources["welcome"])
 
-    allCommands = "Список доступных команд:\n"
-    for i in botConfig.resources["commands"].values():
-        allCommands += i + "\n"
+    allCommands = "\n".join(botConfig.resources["commands"].values())
+    allCommands += "\n\n" + "\n".join(botConfig.resources["funCommands"].values())
 
-    await message.answer(text=allCommands)
+    await message.answer(allCommands)
 
 
 async def send_tech_text(message: types.Message) -> None:

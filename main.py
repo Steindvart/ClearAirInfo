@@ -1,7 +1,7 @@
 import logging
 
 from aiogram import Bot, Dispatcher
-from aiogram.filters import Command
+from aiogram.filters import Command, Text
 
 import config
 import commands as cmd
@@ -25,5 +25,6 @@ if __name__ == '__main__':
     dp.message.register(cmd.send_tech_text, Command(commands=['techText']))
     dp.message.register(cmd.send_tech_file, Command(commands=['techFile']))
     dp.message.register(cmd.send_random_cat, Command(commands=['meow']))
+    dp.message.register(cmd.send_random_cat, Text(startswith="😺"))
 
     dp.run_polling(bot)

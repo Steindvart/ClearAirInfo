@@ -4,8 +4,6 @@ from dataclasses import dataclass
 
 from aiogram.types import User, Message
 
-import default_val as df
-
 
 @dataclass
 class BotConfig:
