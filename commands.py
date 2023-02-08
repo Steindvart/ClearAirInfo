@@ -10,15 +10,18 @@ from main import bot, botConfig
 import config
 import default_val as df
 
+# Alliaces
+res = botConfig.resources
+
 
 async def send_welcome(message: types.Message) -> None:
 
     logging.info(config.get_log_str("send_welcome", message.from_user))
 
-    await message.answer(botConfig.resources["welcome"])
+    await message.answer(res["welcome"])
 
-    allCommands = "\n".join(botConfig.resources["commands"].values())
-    allCommands += "\n\n" + "\n".join(botConfig.resources["funCommands"].values())
+    allCommands = "\n".join(res["mianCommands"].values())
+    allCommands += "\n\n" + "\n".join(res["funCommands"].values())
 
     await message.answer(allCommands)
 

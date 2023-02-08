@@ -21,6 +21,7 @@ if __name__ == '__main__':
     dp: Dispatcher = Dispatcher()
 
     # Commands
+    # TODO - move it to separate block
     dp.message.register(cmd.send_welcome, Command(commands=['start', 'help']))
     dp.message.register(cmd.send_tech_text, Command(commands=['techText']))
     dp.message.register(cmd.send_tech_file, Command(commands=['techFile']))
