@@ -20,7 +20,7 @@ async def send_welcome(message: types.Message) -> None:
 
     await message.answer(res["welcome"])
 
-    allCommands = "\n".join(res["mianCommands"].values())
+    allCommands = "\n".join(res["mainCommands"].values())
     allCommands += "\n\n" + "\n".join(res["funCommands"].values())
 
     await message.answer(allCommands)

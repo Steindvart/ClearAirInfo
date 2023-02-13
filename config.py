@@ -2,6 +2,8 @@ import json
 from typing import Any
 from dataclasses import dataclass
 
+from environs import Env
+
 from aiogram.types import User, Message
 
 
@@ -23,14 +25,15 @@ class BotConfig:
         self._locale = newVal
 
     # Methods
-    def __init__(self, configPath: str) -> None:
+    def __init__(self) -> None:
 
         # NOTE - Default locale is "ru"
         # DEFECT - Get first locale from supported, no hard-code
         self.locale = "ru"
 
-        with open(configPath, "r") as file:
-            self.token = json.load(file)["token"]
+        env = Env()
+        env.read_env()
+        self.token = env("BOT_TOKEN")
 
         with open(f"locales/{self.locale}.json", "r", encoding="utf8") as file:
             self.resources = json.load(file)

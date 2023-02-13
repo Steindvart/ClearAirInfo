@@ -12,7 +12,7 @@ logging.basicConfig(filename='app.log', level=logging.INFO,
                     format='%(asctime)s %(levelname)s %(name)s - %(message)s')
 
 # Global obj
-botConfig: config.BotConfig = config.BotConfig("bot-config.json")
+botConfig: config.BotConfig = config.BotConfig()
 bot: Bot = Bot(botConfig.token, parse_mode="HTML")
 
 

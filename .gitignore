@@ -6,5 +6,5 @@ __pycache__/
 tmp/
 
 # Files
-bot-config.json
+.env
 app.log
