@@ -1,5 +1,5 @@
-import logging
-import json
+import json, logging
+from datetime import datetime
 
 import requests
 from aiogram import types
@@ -45,15 +45,11 @@ async def send_tech_file(message: types.Message) -> None:
 
     logging.info(config.get_log_str("send_tech_file", message.from_user))
 
-    filename = df.TMP_PATH + f"{message.from_id}.json"
-    with open(filename, "w") as file:
-        json.dump(
-            config.get_all_info(bot, message),
-            file, indent=df.INDENT
-        )
+    botInfo: types.User = await bot.get_me()
+    file = json.dumps(config.get_all_info(botInfo, message), indent=df.INDENT).encode('utf-8')
+    filename = 'techInfo_' + str(message.from_user.id) + "_" + datetime.now().strftime("%Y-%m-%d_%H%M%S")
 
-    with open(filename, "rb") as file:
-        await message.reply_document(document=types.InputFile(file))
+    await message.reply_document(document=types.BufferedInputFile(file, filename))
 
 
 async def send_random_cat(message: types.Message) -> None:
